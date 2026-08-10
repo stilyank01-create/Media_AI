@@ -796,3 +796,101 @@ The governing principle for Notebook 02 is:
 > **Sanitise structure, not meaning.**
 
 Technical artefacts may be removed or normalised, but wording relevant to factual, emotional, psychological or social interpretation must not be neutralised merely because it may later influence Media AI measurements.
+
+### Notebook 02 — Data Sanitisation and Preparation
+
+Notebook 02 transforms the acquisition output from Notebook 01 into a
+structurally prepared and auditable research corpus while preserving the
+original source records.
+
+The notebook deliberately separates **technical preparation** from later
+semantic supervision and modelling. It does not assign emotional or
+factological weights and does not perform model-specific tokenisation.
+
+The preparation pipeline includes:
+
+1. **Handover loading and schema compatibility**
+   - Loads the persistent Notebook 01 handover and candidate records.
+   - Verifies record counts, identifiers, fingerprints and source-record
+     integrity.
+   - Supports historical source-schema versions without rewriting the original
+     records.
+
+2. **Technical sanitisation**
+   - Creates separate sanitised representations while preserving the source
+     records unchanged.
+   - Removes only defined technical artefacts such as invalid control
+     characters or markup when present.
+   - Records every detected transformation in the sanitisation audit.
+
+3. **Sanitisation audit**
+   - Compares source and sanitised representations.
+   - Treats unchanged records as valid outcomes.
+   - Verifies that technical preparation has not introduced unintended textual
+     changes.
+
+4. **Near-duplicate assessment**
+   - Performs lexical similarity analysis across candidate articles.
+   - Identifies records that may require review without automatically removing
+     them.
+   - Keeps similarity diagnostics separate from semantic similarity.
+
+5. **Hierarchical article segmentation**
+   - Derives traceable article → paragraph → sentence representations.
+   - Preserves the complete sanitised article text.
+   - Verifies reconstruction of the article from the derived hierarchy.
+   - Does not create permanent model-specific tokens.
+
+6. **Dataset quality diagnostics**
+   - Evaluates structural characteristics such as article, paragraph and
+     sentence lengths.
+   - Flags unusual structural conditions for review rather than exclusion.
+   - Consolidates sanitisation, segmentation and near-duplicate warnings.
+   - Keeps quality flags descriptive rather than semantic judgements.
+
+7. **Persistent prepared corpus**
+   - Persists the canonical prepared corpus and diagnostic artefacts to Google
+     Drive.
+   - Stores complete sanitised text together with its traceable structural
+     hierarchy.
+   - Reloads persisted artefacts to verify that the research handover does not
+     depend on temporary notebook memory.
+
+8. **Final audit and Notebook 03 handover**
+   - Independently verifies persisted counts, identifiers, parent links,
+     diagnostic artefacts and preservation guarantees.
+   - Reports structural review flags explicitly.
+   - Creates the formal handover to
+     `03_supervision_and_annotation`.
+
+#### Methodological boundary
+
+Notebook 02 operates only on the **structural preparation layer**.
+
+At the Notebook 02 → Notebook 03 boundary:
+
+- complete sanitised article text is preserved;
+- original source records remain unchanged;
+- article, paragraph and sentence traceability is preserved;
+- no permanent model-specific tokenisation has been created;
+- no emotional tokens have been pre-filtered;
+- no emotional weights have been assigned;
+- no factological weights have been assigned;
+- no recurrent states have been calculated;
+- no confluent representation has been calculated.
+
+This boundary is intentional. Semantic supervision and annotation are introduced
+only in Notebook 03, while trainable transformative, recurrent and confluent
+model components are introduced in later stages.
+
+#### Persisted outputs
+
+Notebook 02 produces the following principal research artefacts:
+
+- `notebook_02_prepared_corpus.json`
+- `notebook_02_sanitisation_audit.json`
+- `notebook_02_near_duplicate_review.json`
+- `notebook_02_quality_diagnostics.json`
+- `notebook_02_handover_manifest.json`
+
+The prepared corpus is the canonical input to Notebook 03.
