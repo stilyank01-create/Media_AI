@@ -894,3 +894,204 @@ Notebook 02 produces the following principal research artefacts:
 - `notebook_02_handover_manifest.json`
 
 The prepared corpus is the canonical input to Notebook 03.
+
+### Notebook 03 — Supervision and Annotation
+
+Notebook 03 establishes the supervision and annotation framework used to create
+traceable training and evaluation signals for the Media AI architecture.
+
+The notebook receives the persistent prepared corpus from Notebook 02 and
+operationalises the emotional and factological constructs required for later
+model development.
+
+It deliberately separates **supervision** from **model architecture and
+training**. No transformative, recurrent or confluent model component is
+trained in this notebook.
+
+The supervision pipeline includes:
+
+1. **Prepared-corpus handover and verification**
+
+   * Loads the persistent Notebook 02 handover manifest and prepared corpus.
+   * Reconstructs the research input independently of temporary Notebook 02
+     objects.
+   * Verifies article, paragraph and sentence counts and preservation
+     guarantees.
+   * Confirms that no emotional or factological weights have already been
+     assigned.
+
+2. **Annotation schema**
+
+   * Defines sentence-level supervision with preceding article context.
+   * Operationalises 11 emotional dimensions and 8 factological components.
+   * Separates reported emotion, transformative emotion and immediate emotional
+     state.
+   * Represents transformative emotion as a signed change on `[-1, +1]`.
+   * Keeps immediate emotional state and supervision weights non-negative.
+   * Leaves activation functions and recurrent-state computation to the model
+     architecture rather than prescribing them through the annotation schema.
+
+3. **Traceable supervision records**
+
+   * Constructs one supervision context and blank annotation record for every
+     prepared sentence.
+   * Preserves Media AI article, paragraph and sentence identifiers together
+     with their structural indices.
+   * Maintains preceding context without exposing future article context.
+   * Keeps annotations separate from the prepared corpus.
+
+4. **Independent LLM supervision protocol**
+
+   * Defines provider-independent supervision instructions and structured output
+     requirements.
+   * Prevents supervisors from receiving future context, another supervisor's
+     labels or Media AI model predictions.
+   * Preserves supervisor identity and annotation provenance.
+   * Supports independent comparison across multiple model families.
+
+5. **Controlled supervisor execution**
+
+   * Provides a stable five-slot supervisor registry.
+   * Allows individual supervisors to be enabled or disabled centrally.
+   * Separates provider configuration, credentials, implementation status and
+     execution readiness.
+   * Retains raw provider responses separately for subsequent validation.
+   * Supports tightly limited pilot execution before corpus-scale supervision.
+   * Keeps external LLM supervision disabled by default.
+
+6. **Supervision validation**
+
+   * Standardises successful supervisor outputs into the Media AI annotation
+     structure.
+   * Validates schema compliance, allowed ranges, evidence and provenance before
+     annotations are accepted.
+   * Separates accepted supervision from rejected responses and diagnostic
+     reasons.
+   * Does not silently repair malformed supervision into valid reference data.
+
+7. **Supervisor agreement and disagreement**
+
+   * Aligns independent annotations through their sentence identifiers.
+   * Supports pairwise comparison when multiple supervisors annotate the same
+     sentence.
+   * Measures differences in continuous supervision signals.
+   * Separately evaluates the direction of signed transformative emotion.
+   * Compares factological components through exact agreement.
+   * Treats disagreement as a review signal rather than an automatic error or
+     exclusion criterion.
+   * Does not construct implicit consensus through averaging, voting or
+     supervisor ranking.
+
+8. **Reference-dataset construction**
+
+   * Provides a versioned layer for converting validated supervision into
+     downstream research records.
+   * Distinguishes `machine_supervision`, `human_reviewed`,
+     `adjudicated_reference` and `not_reference_ready` states.
+   * Separates annotation validity from reference-label status.
+   * Does not automatically treat independent LLM supervision as human-reviewed
+     or adjudicated ground truth.
+   * Keeps construction and persistent storage under independent execution
+     controls.
+
+9. **Final audit and Notebook 04 readiness**
+
+   * Independently verifies the prepared input, annotation schema, supervision
+     contexts, LLM protocol, supervisor registry, validation layer, comparison
+     layer and reference-dataset infrastructure.
+   * Distinguishes **Notebook 03 pipeline completeness** from **Notebook 04
+     supervision-data readiness**.
+   * Reports explicit readiness blockers when live supervision, reference-data
+     construction or persistence has not yet occurred.
+   * Prevents the existence of supervision infrastructure from being mistaken
+     for the existence of a completed reference dataset.
+
+#### Current pilot state
+
+The Notebook 03 supervision infrastructure has been implemented and passes its
+final structural and methodological audit.
+
+The current prepared input contains:
+
+```text
+Articles                    3
+Paragraphs                  3
+Sentences                  54
+Supervision contexts       54
+LLM supervision payloads   54
+Invalid payloads             0
+Supervisor slots             5
+```
+
+External LLM supervision remains disabled at the current checkpoint.
+
+Consequently:
+
+```text
+Raw supervision responses    0
+Accepted annotations          0
+Rejected annotations          0
+Reference records             0
+
+Notebook 03 pipeline complete True
+Notebook 04 data ready        False
+```
+
+This is an intentional pre-supervision state rather than a failed pipeline.
+
+The initial live experiment will begin with a single enabled supervisor and a
+strictly limited pilot request before supervision is expanded to the prepared
+corpus.
+
+#### Methodological boundary
+
+Notebook 03 operates only on the **supervision and annotation layer**.
+
+At the Notebook 03 → Notebook 04 boundary:
+
+* complete prepared text remains preserved;
+* structural traceability remains intact;
+* annotations remain derived research artefacts;
+* reported and transformative emotion remain separate constructs;
+* signed transformation is distinguished from non-negative emotional state;
+* independent supervisor outputs remain independently identifiable;
+* disagreement is not automatically converted into consensus;
+* machine supervision is not automatically treated as adjudicated ground truth;
+* no permanent model-specific tokenisation has been introduced;
+* no model training has been performed;
+* no recurrent state has been calculated;
+* no confluent representation has been calculated.
+
+Notebook 04 becomes data-ready only after valid supervision has been produced,
+the reference dataset has been constructed and the required handover artefacts
+have been persisted.
+
+#### Planned handover
+
+Once live supervision and reference-dataset construction are enabled, Notebook
+03 will provide the versioned supervision artefacts required by:
+
+`04_transformative_recurrent_and_confluent_architecture.ipynb`
+
+The handover will preserve the relationship between prepared textual evidence,
+supervisor provenance, validated annotation records and downstream model
+training.
+
+This maintains the research sequence:
+
+```text
+Prepared Corpus
+        ↓
+Independent Supervision
+        ↓
+Validation
+        ↓
+Agreement / Review Diagnostics
+        ↓
+Reference Dataset
+        ↓
+Notebook 04 Model Architecture and Training
+```
+
+Model architecture, recurrent-state computation and confluent representation
+remain outside the scope of Notebook 03.
