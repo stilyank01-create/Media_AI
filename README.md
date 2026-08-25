@@ -1,307 +1,413 @@
-# Media_AI
+Media AI
 
-## Abstract
+Abstract
 
-Media texts do more than transmit factual information. Through selection, association, emphasis, sequencing, emotional language and the construction of social groups, a text may progressively transform how information is interpreted. Conventional approaches to sentiment analysis, emotion classification and media-bias detection frequently reduce these processes to categorical labels or aggregate scores. Such representations can obscure how emotional and social effects develop through a text, how several emotions coexist, how social groups are constructed and related, and how factual and emotional information interact.
+Media AI is a research prototype for representing how factual information, psychological framing and social relations develop through media text as distinguishable but interacting sequential processes.
 
-**Media AI** investigates whether these processes can be represented computationally through an interpretable multidimensional architecture built upon a pretrained language model. The pretrained model provides the contextual semantic substrate rather than being treated as the principal object of the study. Media AI introduces additional **transformative, recurrent and confluent components** intended to model how textual information changes emotional and social representations as an article develops.
+Rather than reducing an article to a sentiment label or a single bias score, the project constructs traceable representations across four textual levels:
 
-The architecture is organised around four distinct computational questions:
+Token → Sentence → Paragraph → Article
 
-**Backbone — What does the text mean?**
+and three principal representational spaces:
 
-The pretrained backbone processes the complete observed text and produces contextual semantic representations. Its internal attention coefficients are not interpreted as Media AI emotional weights.
+Factual → Psychological → Social
 
-**Transformative layer — What emotional change does the new information produce?**
+A pretrained language model supplies the contextual semantic substrate. Media AI then adds project-specific confluent, representational, transformative, Transformative-Weight and recurrent mechanisms. The resulting architecture is designed to ask not only what a sentence represents, but how new information changes an existing state, how strongly that change is admitted into the recurrent trajectory, and how the resulting state develops across an article.
 
-The transformative component uses contextual backbone representations to estimate signed changes across a multidimensional emotional state. It processes all tokens appearing in the observed text rather than relying on a predefined vocabulary of emotional terms. Emotional contributions are therefore calculated contextually and on demand. The same token may have negligible emotional effect in one context and substantial transformative effect in another.
+The completed pilot architecture contains:
 
-**Recurrent layer — What emotional weight is carried forward?**
+Component
 
-The recurrent component determines how much of the resulting emotional state is transmitted into subsequent textual context. It models reinforcement, persistence, attenuation and reversal rather than performing a second emotion classification.
+Parameters
 
-**Confluent layer — Around whom or what does the emotional state converge?**
+Representation architecture
 
-The confluent component relates emotional and social states to persons, institutions, concepts, events and potentially overlapping social groups. It provides the relational structure required to investigate identification, distancing, inclusion, exclusion, solidarity, hostility, integration and polarisation.
+894,003
 
-Media AI distinguishes **emotional state**, **emotional transformation** and **emotional weight carried forward**. If the backbone representation of textual unit (t) is denoted by (H_t), the transformative component estimates a multidimensional signed change:
+Transformative modules
 
-[
-\Delta E_t = T(H_t, R_{t-1})
-]
+8,187
 
-where (R_{t-1}) represents the emotional weight carried from preceding context. The immediate emotional state is then:
+Trainable Transformative-Weight parameters
 
-[
-E_t^{*}=R_{t-1}+\Delta E_t
-]
+49
 
-and the recurrent component estimates the state transmitted further:
+Total persisted Media AI architecture
 
-[
-R_t=\mathcal{R}(E_t^{*},\Delta E_t,H_t)
-]
+902,239
 
-This separation allows Media AI to examine not only whether an emotion is detectable, but how it is introduced, strengthened, reduced, reversed and carried through the text.
+The current pilot corpus contains 3 independent English-language articles and 54 canonical sentences. The architecture has been validated for deterministic multi-article execution, causal article-local recurrence, article-boundary resets, supervision masking, parameter-scope isolation and persistent notebook-to-notebook restoration.
 
-The psychological representation is designed as a multidimensional, multi-label emotional space rather than a single positive-versus-negative sentiment score. Multiple emotional states may coexist, and positive and negative processes are treated symmetrically. Fear and reassurance, anger and compassion, tension and relief, hostility and solidarity, and polarisation and integration are therefore represented as substantive directions rather than assuming that framing is inherently negative.
+Controlled pilot optimisation reduced the equal-pathway recurrent objective from 0.21064013 at the original Notebook 09 pre-training boundary to 0.20858341, and continued Notebook 10 pilot optimisation reduced the corresponding objective from the inherited 0.20858338 baseline to 0.20655662.
 
-The architecture also distinguishes **reported emotional content** from **model-estimated emotional transformation**. A text may report that an individual or population is afraid without necessarily introducing fear-inducing framing. Conversely, information containing no explicit emotional terminology may produce a substantial emotional transformation because of the context established by preceding text.
+These results demonstrate architectural learnability and controlled in-sample optimisation only. They are not evidence of out-of-sample generalisation, because the current optimisation and evaluation use the same three-article pilot corpus.
 
-Media AI additionally distinguishes **factological weight** from **emotional weight**. Factological weight represents the contribution of externally assessable informational content, including explicit claims, observations, quantities, evidence, attribution, certainty and speculation. It is not interpreted as the probability that a statement is true. Emotional weight represents the strength and persistence of multidimensional emotional information and emotional transformation. Their relationship can therefore be examined across textual sequences without treating either dimension normatively.
+Model outputs throughout the project are treated as estimates of operationally defined constructs rather than psychological, social or factual ground truth.
 
-Interpretability is treated as an architectural requirement. Aggregate emotional or social conclusions must remain decomposable into their underlying dimensions and traceable through article, paragraph, sentence and token levels. Colour-based inspection is planned as a visual projection of these numerical representations rather than as independent evidence.
+Research Framework
 
-The empirical study follows the predefined sequence:
+Research Question
 
-**Research Question → Hypotheses → Method → Experiment → Evidence → Interpretation**
+Can factual information, psychological transformation and social framing in media text be computationally represented as distinguishable but interacting processes while preserving their development across tokens, sentences, paragraphs, social groups and the article as a whole?
 
-This structure is intended to separate assumptions made during model construction from observations generated by the experiments and from conclusions drawn afterwards.
+A related architectural question is whether explicit transformative, recurrent and confluent mechanisms provide useful structure beyond a conventional contextual language representation.
 
-The pilot corpus uses randomly sampled full-text English-language media articles. Article acquisition is selective only according to technical usability and does not filter by topic, sentiment, publisher, political orientation or anticipated framing. Original provider records are preserved separately from derived analytical datasets to maintain source traceability.
+The project deliberately avoids defining the task as classifying an article as biased, unbiased, manipulative, trustworthy or untrustworthy. Such labels would introduce normative conclusions before the underlying constructs have been operationalised and evaluated.
 
-The proposed transformative, recurrent and confluent architecture will be evaluated against simpler pretrained-model baselines through held-out testing, component ablation, directional-symmetry analysis, controlled counterfactuals and independent supervision. Model outputs are treated throughout as estimates of operationally defined constructs rather than established psychological, social or factual ground truth.
+Hypotheses
 
-The central objective of Media AI is therefore not simply to classify emotion or assign a media-bias label, but to investigate whether the **transformation of interpretation through language can itself be represented as a transparent, sequential, multidimensional and relational computational process**.
+H1 — Representational Separation
 
----
+Factual, psychological and social information can be represented as distinguishable but interacting spaces rather than collapsed into a single score.
 
-# Research Framework
+H2 — Contextual Transformation
 
-## Research Question
+A contextual transformative mechanism can represent signed changes produced by both explicit language and information whose effect depends on preceding context.
 
-The central research question is:
+H3 — Sequential Dependence
 
-> **Can factual information, emotional transformation and social framing in media text be computationally represented as distinguishable but interacting processes while preserving their development across tokens, sentences, paragraphs, social groups and the article as a whole?**
+A recurrent state can represent effects that accumulate, persist, attenuate or reverse across textual sequences.
 
-A related architectural question is whether explicitly transformative, recurrent and confluent components capture information that is not adequately represented by a conventional pretrained language model alone.
+H4 — Controlled Carry-Forward
 
-The project deliberately avoids defining the research problem as the classification of articles as biased, unbiased, manipulative, trustworthy or untrustworthy. Such categories would introduce normative conclusions before the underlying constructs have been operationalised and validated.
+A learned Transformative-Weight mechanism can regulate how much of a candidate transformation contributes to the subsequent recurrent state.
 
-Instead, Media AI investigates how contextual information changes model-estimated emotional and social states and whether these changes can be represented, traced and experimentally evaluated.
+H5 — Social Confluence
 
-## Hypotheses
+Social representations can preserve multiple relational dimensions, including dimensions that remain deferred when supervision is insufficient.
 
-The pilot is organised around several falsifiable hypotheses.
+H6 — Directional Symmetry
 
-### H1 — Representational Separation
+Positive and negative changes can be represented without assuming that framing is inherently negative.
 
-Factological, emotional and social information can be represented as distinguishable but interacting dimensions rather than being collapsed into a single sentiment or framing score.
+H7 — Hierarchical Attribution
 
-### H2 — Contextual Emotional Transformation
+Article-level estimates should remain traceable to lower textual levels and their underlying dimensions.
 
-A contextual transformative component can identify emotional state changes produced by both explicit emotional language and indirectly consequential information.
+H8 — Architectural Contribution
 
-This includes cases where individual words or sentences contain little overt emotional vocabulary but produce substantial emotional change because of preceding context.
+Additional architectural complexity is justified only when controlled experiments show a measurable contribution relative to simpler alternatives.
 
-### H3 — Sequential Dependence
+Core Methodological Principles
 
-A recurrent representation improves the modelling of emotional effects that accumulate, persist, attenuate or reverse across textual sequences.
+Complete-text processing
 
-### H4 — Emotional Carry-Forward
+Media AI does not preselect a vocabulary of supposedly emotional words. Contextual representations are generated from observed text and downstream contributions are calculated from those contextual states.
 
-The recurrent component can estimate how much emotional weight resulting from one textual unit is carried into subsequent context rather than treating every sentence or paragraph as an independent observation.
+For contextual textual representations:
 
-### H5 — Group Confluence
+$$
+H = (h_1, h_2, \ldots, h_n)
+$$
 
-Explicit modelling of dynamically constructed and potentially overlapping social groups improves representation of identification, distancing and relationships between groups.
+the meaning of a token depends on its context. The persistent learned object is therefore the mapping applied to contextual representations, not a static emotional dictionary.
 
-### H6 — Directional Symmetry
+Representation, transformation and recurrence are distinct
 
-The architecture can represent positive and negative emotional and social transformations without treating one direction as the default.
+For pathway (p), let the current representation be (z_t^{(p)}), the preceding recurrent state be (r_{t-1}^{(p)}), and the candidate transformation be:
 
-Examples include:
+$$
+\Delta_t^{(p)} = T_p\left(z_t^{(p)}, r_{t-1}^{(p)}\right)
+$$
 
-* fear and reassurance;
-* anger and compassion;
-* tension and relief;
-* hostility and solidarity;
-* exclusion and inclusion;
-* polarisation and integration.
+A dimension-wise Transformative-Weight vector (w^{(p)}) gates the candidate transformation:
 
-### H7 — Hierarchical Attribution
+$$
+\widetilde{\Delta}_t^{(p)} = w^{(p)} \odot \Delta_t^{(p)}
+$$
 
-Article-level model estimates can be meaningfully traced to paragraphs, sentences and contextual tokens contributing to the result.
+The current pilot uses an additive recurrent update:
 
-### H8 — Architectural Contribution
+$$
+r_t^{(p)} = r_{t-1}^{(p)} + \widetilde{\Delta}_t^{(p)}
+$$
 
-The combined transformative, recurrent and confluent architecture provides measurable improvements over simpler pretrained-model and projection-based baselines on predefined evaluation criteria.
+with a deterministic zero initial condition at every article boundary:
 
-The hypotheses may be supported, partially supported or not supported. Increased architectural complexity is justified only where experimental evidence demonstrates a measurable contribution.
+$$
+r_0^{(p)} = \mathbf{0}
+$$
 
----
+No recurrent state propagates between articles.
 
-# Methodological Principles
+Transformative-Weight parameterisation
 
-## Complete-Text Processing
+Active dimensions use a latent parameter (\alpha) mapped to a bounded effective weight:
 
-Media AI processes the complete observed text rather than preselecting words assumed to carry emotional content.
+$$
+w = \sigma(\alpha), \qquad 0 < w < 1
+$$
 
-For tokens:
+The pilot initialises active latent parameters at zero:
 
-[
-X=(x_1,x_2,\ldots,x_n)
-]
+$$
+\alpha_0 = 0 \quad \Rightarrow \quad w_0 = 0.5
+$$
 
-the pretrained backbone produces contextual representations:
+Deferred dimensions remain structurally present but fixed at zero and are not trainable.
 
-[
-H=(h_1,h_2,\ldots,h_n)
-]
+Supervision-derived transformation targets
 
-These representations depend on context. Media AI therefore does not maintain a predefined emotional table for the backbone vocabulary.
+Where current-state supervision is available, signed transformation targets are reconstructed within each article as:
 
-The persistent learned object is the projection or transformation function. Emotional contributions are calculated dynamically only for the contextual token representations occurring in the text currently being analysed.
+$$
+y_t^{(p)} = s_t^{(p)} - s_{t-1}^{(p)}
+$$
 
-Accordingly:
+with a deterministic zero preceding condition for the first sentence of every article.
 
-[
-\boxed{\text{all observed tokens are processed}}
-]
+Missing supervision is represented by masks and remains distinct from a genuine zero-valued target.
 
-while:
+Objective
 
-[
-\boxed{\text{emotional weights are generated contextually on demand}}
-]
+Each pathway uses mask-aware mean squared error over supervision-valid and activation-eligible elements:
 
-A token such as *open* may have almost no emotional consequence in one passage and contribute substantially to fear or tension in another.
+$$
+\mathcal{L}p =
+\frac{\sum{t,d} m_{t,d}^{(p)}
+\left(\widetilde{\Delta}{t,d}^{(p)} - y{t,d}^{(p)}\right)^2}
+{\sum_{t,d} m_{t,d}^{(p)}}
+$$
 
-## Emotional State and Transformation
+The pilot objective gives the factual, psychological and social pathways equal weight:
 
-The project distinguishes three quantities:
+\frac{1}{3}
+\left(
+\mathcal{L}{\mathrm{factual}}
++
+\mathcal{L}{\mathrm{psychological}}
++
+\mathcal{L}_{\mathrm{social}}
+\right)
+$$
 
-[
-\text{emotional state}
-\neq
-\text{emotional transformation}
-\neq
-\text{model confidence}
-]
+Model output is not ground truth
 
-The transformative component estimates signed emotional change rather than merely predicting absolute emotional intensity.
+$$
+\boxed{\text{model output} \neq \text{ground truth}}
+$$
 
-A transformation may therefore be positive or negative for a given emotional dimension:
+Terms such as estimated, model-assigned, model-detected and according to the operational definition are preferred where appropriate.
 
-[
-\Delta E_{t,e}\in[-1,+1]
-]
+Architecture
 
-where a positive value increases the relevant emotional state and a negative value reduces it.
+End-to-end research pipeline
 
-This permits the model to represent the emergence and resolution of emotional states rather than only their presence.
+flowchart TD
+    A[01 Data acquisition<br/>source traceability] --> B[02 Sanitisation<br/>structural preparation]
+    B --> C[03 Supervision<br/>annotation]
+    C --> D[04 Representation<br/>architecture]
+    D --> E[05 Contextual representations<br/>experimental preparation]
+    E --> F[06 Factual pathway]
+    F --> G[07 Social pathway<br/>representation finalisation]
+    G --> H[08 Transformative mechanism]
+    H --> I[09 Transformative Weight<br/>recurrent architecture]
+    I --> J[10 Multi-article validation<br/>continued pilot optimisation]
 
-## Transformer Attention Is Not Emotional Weight
+The notebooks are deliberately cumulative. Persistent handovers allow later notebooks to restore validated upstream state without relying on temporary Colab memory.
 
-Attention coefficients produced by the pretrained backbone contribute to contextual language representation.
+Model architecture
 
-They are not interpreted as emotional weight.
+flowchart LR
+    X[Contextual sentence vector<br/>768] --> B[Backbone<br/>Linear 768→768]
+    B --> C[Global confluent module<br/>768→256]
+    C --> R[Representation core<br/>256→128]
 
-Media AI emotional representations are produced by additional trained mappings and subsequently evaluated through attribution, supervision and experimental comparison.
+    R --> P[Psychological head<br/>128→34]
+    R --> F[Factual head<br/>128→10]
+    R --> S[Social head<br/>128→7]
 
-This distinction prevents internal Transformer attention from being relabelled as an explanation of psychological effect.
+    P --> TP[Psychological transformative<br/>68→68→34]
+    F --> TF[Factual transformative<br/>20→20→10]
+    S --> TS[Social transformative<br/>14→14→7]
 
-## Factological and Emotional Weight
+    WP[34 active TW gates] --> GP[Gate candidate]
+    WF[10 active TW gates] --> GF[Gate candidate]
+    WS[5 active + 2 deferred<br/>TW dimensions] --> GS[Gate candidate]
 
-Factological and emotional weight are maintained separately.
+    TP --> GP
+    TF --> GF
+    TS --> GS
 
-Factological weight concerns the relative informational contribution of externally assessable claims, observations, quantities, evidence, attribution, certainty and speculation.
+    GP --> RP[Psychological recurrent state<br/>34]
+    GF --> RF[Factual recurrent state<br/>10]
+    GS --> RS[Social recurrent state<br/>7]
 
-Emotional weight concerns multidimensional emotional content and transformation.
+The transformative modules consume the current pathway representation together with the immediately preceding pathway-specific recurrent state. Their input dimensions are therefore twice the pathway state dimension.
 
-Neither quantity is automatically normative.
+Causal recurrent execution
 
-A passage with high emotional weight is not necessarily manipulative, and a passage with high factological weight is not necessarily true.
+flowchart LR
+    Z0[Article boundary] --> R0[Zero recurrent state]
+    R0 --> S1[Sentence 1]
+    S1 --> D1[Candidate transformation]
+    D1 --> W1[Transformative Weight gate]
+    W1 --> R1[Recurrent state 1]
 
-## No Aggregate Without Decomposition
+    R1 --> S2[Sentence 2]
+    S2 --> D2[Candidate transformation]
+    D2 --> W2[Transformative Weight gate]
+    W2 --> R2[Recurrent state 2]
 
-Media AI should not expose a broad psychological or social score without allowing it to be decomposed into the dimensions from which it was derived.
+    R2 --> SN[... Sentence t]
+    SN --> DN[Candidate transformation]
+    DN --> WN[Transformative Weight gate]
+    WN --> RN[Recurrent state t]
 
-An emotional result should therefore remain inspectable through the emotional spectrum.
+    RN --> END[End of article]
+    END --> RESET[Discard runtime state]
+    RESET --> NEXT[Next article starts from zero]
 
-A social result should remain inspectable through the represented groups, relational dimensions and relevant textual evidence.
+No future sentence is supplied to an earlier recurrent step, supervision is never supplied as recurrent model input, and runtime article states are not persisted as learned parameters.
 
-## Model Output Is Not Ground Truth
+Parameter architecture
 
-Throughout the research:
+pie showData
+    title Media AI persisted parameter architecture
+    "Representation — 894,003" : 894003
+    "Transformative — 8,187" : 8187
+    "Transformative Weight — 49" : 49
 
-[
-\boxed{\text{model output}\neq\text{ground truth}}
-]
+The Transformative-Weight layer is intentionally small. It provides 49 trainable latent gates over the already constructed factual, psychological and social transformative pathways.
 
-Terms such as *estimated*, *model-assigned*, *model-detected* and *according to the operational definition* are preferred where appropriate.
+Current Architecture Contract
 
-Claims concerning real psychological or social effects require independent validation beyond the existence of a model score.
+Pathway
 
----
+Representation dimension
 
-# Notebook Architecture
+Transformative input
 
-The pilot is organised into five reproducible Google Colab notebooks.
+Transformative hidden
 
-Each notebook is intended to remain relatively compact, with approximately ten substantial code blocks supported by detailed Markdown explanations.
+Transformative output
 
-The Markdown documentation is part of the research methodology rather than merely an explanation of the Python implementation.
+Active TW dimensions
 
-Each relevant section explains:
+Deferred TW dimensions
 
-* purpose;
-* methodological reasoning;
-* inputs;
-* outputs;
-* assumptions;
-* safeguards;
-* interpretation;
-* limitations.
+Factual
 
-The intended notebook sequence is:
+10
 
-```text id="j9v8pn"
+20
+
+20
+
+10
+
+10
+
+0
+
+Psychological
+
+34
+
+68
+
+68
+
+34
+
+34
+
+0
+
+Social
+
+7
+
+14
+
+14
+
+7
+
+5
+
+2
+
+Total
+
+51
+
+
+
+
+
+51
+
+49
+
+2
+
+The two deferred social dimensions are:
+
+economic cohesion — index 1;
+
+religious cohesion — index 3.
+
+They remain structurally represented but fixed at zero under the current supervision and activation contract.
+
+Notebook Architecture
+
+The project evolved beyond the original five-notebook plan into a ten-notebook pilot research pipeline. The extension was intentional: later architectural mechanisms were separated into independent notebooks so that restoration, parameter scope, training boundaries and persistence could be audited explicitly.
+
 01 — Data Acquisition and Source Traceability
 02 — Data Sanitisation and Preparation
 03 — Supervision and Annotation
-04 — Transformative, Recurrent and Confluent Architecture
-05 — Evaluation, Inspection and Interpretation
-```
+04 — Representation and Model Architecture
+05 — Contextual Representation and Experimental Preparation
+06 — Factual Representation Path
+07 — Social Representation and Architecture Finalisation
+08 — Transformative Mechanism
+09 — Transformative-Weight and Recurrent Architecture
+10 — Multi-Article Validation and Pilot Completion
 
----
+Notebook 01 — Data Acquisition and Source Traceability
 
-# Notebook 01 — Data Acquisition and Source Traceability
-
-## Objective
+Objective
 
 Notebook 01 establishes the empirical input to the Media AI research pipeline.
 
 Its responsibility is limited to:
 
-* establishing a reproducible computational environment;
-* configuring persistent research storage;
-* isolating API credentials;
-* defining acquisition safeguards;
-* maintaining persistent API usage accounting;
-* specifying article eligibility rules before acquisition;
-* preserving original provider records;
-* validating the external API;
-* performing controlled candidate acquisition;
-* reviewing technical eligibility and exact duplicates;
-* creating a reproducible candidate ordering;
-* generating a persistent handover manifest for Notebook 02.
+establishing a reproducible computational environment;
 
-Notebook 01 deliberately does **not** perform semantic sanitisation, emotion analysis, tensor construction, supervision or model inference.
+configuring persistent research storage;
+
+isolating API credentials;
+
+defining acquisition safeguards;
+
+maintaining persistent API usage accounting;
+
+specifying article eligibility rules before acquisition;
+
+preserving original provider records;
+
+validating the external API;
+
+performing controlled candidate acquisition;
+
+reviewing technical eligibility and exact duplicates;
+
+creating a reproducible candidate ordering;
+
+generating a persistent handover manifest for Notebook 02.
+
+Notebook 01 deliberately does not perform semantic sanitisation, emotion analysis, tensor construction, supervision or model inference.
 
 This maintains a clear boundary between acquired source material and subsequent analytical transformation.
 
----
-
-## Environment and Reproducibility
+Environment and Reproducibility
 
 The notebook establishes project metadata, execution timestamps and a fixed random seed before external data are acquired.
 
 The project currently uses:
 
-```python id="wxyak5"
 RANDOM_SEED = 42
-```
 
 The fixed seed supports reproducible random ordering and subsequent experiments where deterministic execution is available.
 
@@ -309,9 +415,7 @@ Runtime metadata record the project version, Python version, principal package v
 
 The environment block performs no external API request.
 
----
-
-## Restricted Persistent Storage
+Restricted Persistent Storage
 
 Google Colab runtimes are temporary, so persistent storage is required for source records and experiment artefacts.
 
@@ -319,7 +423,6 @@ Media AI uses the Google Drive API rather than mounting the user's complete Goog
 
 The notebook creates a dedicated project structure including:
 
-```text id="fn2lhx"
 Media_AI/
 ├── data/
 │   ├── raw_api/
@@ -337,23 +440,18 @@ Media_AI/
 │   ├── colours/
 │   └── explanations/
 └── logs/
-```
 
 Folder creation is idempotent. Re-executing the storage block reuses existing project folders rather than deliberately creating duplicate structures.
 
 No Google Drive filesystem mount is required.
 
----
-
-## API Credential Isolation
+API Credential Isolation
 
 The pilot currently uses the GNews API.
 
 The API credential is stored through Google Colab Secrets under:
 
-```text id="6l6iop"
 GNEWS_API_KEY
-```
 
 The credential is not embedded in notebook cells, printed in notebook outputs or written to research manifests.
 
@@ -361,31 +459,24 @@ Opening the notebook from GitHub therefore does not expose the original research
 
 Researchers who wish to perform new acquisition provide their own API key.
 
----
-
-## Acquisition Master Switch
+Acquisition Master Switch
 
 New article acquisition is disabled by default:
 
-```python id="u8q8oq"
 DOWNLOAD_NEW_DATA = False
-```
 
 The notebook must be deliberately switched into acquisition mode before candidate data can be requested.
 
 This protects against accidental API traffic caused by reopening the notebook or executing all cells.
 
-After live acquisition, the recommended state is to return the switch to `False`.
+After live acquisition, the recommended state is to return the switch to False.
 
----
-
-## API Usage Safeguards
+API Usage Safeguards
 
 The pilot defines independent research-side usage limits rather than relying solely on provider limits.
 
 At the current pilot configuration:
 
-```text id="axncyf"
 Approved requests/day       1,000
 Research requests/day         200
 
@@ -395,66 +486,59 @@ Research articles/request       5
 Research articles/day         200
 
 Usage fraction                20%
-```
 
 These settings are intentionally conservative.
 
 The notebook checks limits before each live request.
 
----
-
-## Persistent API Usage Ledger
+Persistent API Usage Ledger
 
 API accounting is stored persistently rather than only in temporary Colab memory.
 
 The usage ledger records:
 
-* UTC date;
-* requests used;
-* articles requested;
-* articles returned;
-* last update timestamp.
+UTC date;
+
+requests used;
+
+articles requested;
+
+articles returned;
+
+last update timestamp.
 
 Persisting the ledger prevents a Colab runtime restart from silently resetting research-side usage counters.
 
 Every completed connection or acquisition request is entered into the ledger.
 
----
-
-## Content-Neutral Sampling Design
+Content-Neutral Sampling Design
 
 Article-selection criteria are specified before observing the research corpus.
 
 The governing principle is:
 
-> **Random by content; selective only by technical usability.**
+Random by content; selective only by technical usability.
 
 The acquisition process does not select articles according to:
 
-```text id="8qle5f"
 Topic                         False
 Sentiment                     False
 Publisher preference          False
 Political orientation         False
 Expected framing              False
-```
 
 The purpose is to reduce researcher-induced selection effects and avoid constructing the corpus around phenomena that the proposed architecture is expected to discover.
 
----
-
-## Technical Eligibility
+Technical Eligibility
 
 The pilot technical criteria are:
 
-```text id="jfarqv"
 Target language           English
 Minimum article length    300 words
 Maximum article length    None
 Full text                 Required
 Source information        Required
 Exact duplicate           Excluded
-```
 
 The minimum-length criterion is architectural rather than editorial.
 
@@ -462,9 +546,7 @@ Media AI is intended to examine transformations across sequential context. Very 
 
 No maximum article length is imposed during acquisition. Model context-window constraints are handled later during preparation.
 
----
-
-## Exact and Near-Duplicate Separation
+Exact and Near-Duplicate Separation
 
 Notebook 01 detects exact duplicates through deterministic textual fingerprints based on conservatively normalised content.
 
@@ -472,22 +554,22 @@ The fingerprint is used only for exact identity.
 
 It does not identify:
 
-* syndicated articles with minor changes;
-* paraphrases;
-* semantically similar reports;
-* different reports of the same event.
+syndicated articles with minor changes;
+
+paraphrases;
+
+semantically similar reports;
+
+different reports of the same event.
 
 Near-duplicate detection is deliberately deferred to Notebook 02, where similarity methods can be evaluated explicitly.
 
----
-
-## Original Source Records
+Original Source Records
 
 The complete provider record is preserved separately from derived research data.
 
 The observed GNews article schema currently contains:
 
-```text id="8qxq4m"
 content
 description
 id
@@ -497,52 +579,71 @@ publishedAt
 source
 title
 url
-```
 
 Media AI maps selected fields into a standard source-record schema while retaining the complete provider payload.
 
 The source record contains information such as:
 
-* internal Media AI record identifier;
-* source-record schema version;
-* provider name;
-* provider article identifier;
-* acquisition method;
-* UTC acquisition timestamp;
-* publication timestamp;
-* source metadata;
-* source URL;
-* article language;
-* title;
-* word count;
-* textual fingerprint;
-* technical eligibility result;
-* acquisition context;
-* preserved provider payload.
+internal Media AI record identifier;
+
+source-record schema version;
+
+provider name;
+
+provider article identifier;
+
+acquisition method;
+
+UTC acquisition timestamp;
+
+publication timestamp;
+
+source metadata;
+
+source URL;
+
+article language;
+
+title;
+
+word count;
+
+textual fingerprint;
+
+technical eligibility result;
+
+acquisition context;
+
+preserved provider payload.
 
 Analytical outputs are excluded.
 
 The source record therefore does not contain:
 
-* emotional weight;
-* factological weight;
-* emotion classifications;
-* transformative-state values;
-* recurrent-state values;
-* confluent representations;
-* Social Polarisation Distance;
-* supervisory labels;
-* model confidence.
+emotional weight;
+
+factological weight;
+
+emotion classifications;
+
+transformative-state values;
+
+recurrent-state values;
+
+confluent representations;
+
+Social Polarisation Distance;
+
+supervisory labels;
+
+model confidence.
 
 Those belong to subsequently derived datasets.
 
----
-
-## Source Traceability
+Source Traceability
 
 The separation between source and derived data establishes the research chain:
 
-```text id="rpfx58"
 External Source
       ↓
 Original Acquisition Record
@@ -554,15 +655,12 @@ Model Input
 Model Output
       ↓
 Interpretation
-```
 
 A later model conclusion should therefore remain traceable to the textual evidence from which it originated.
 
 The original provider record is not overwritten by later preprocessing.
 
----
-
-## Controlled API Validation
+Controlled API Validation
 
 Before acquiring research candidates, Notebook 01 performs a minimal controlled connection test.
 
@@ -570,15 +668,12 @@ The test requires an additional explicit switch and requests only one article.
 
 The first live GNews validation returned:
 
-```text id="6an4xv"
 Test status               SUCCESS
 Articles returned         1
 Top-level response        articles, totalArticles
-```
 
 The observed article fields were:
 
-```text id="qyv8pd"
 content
 description
 id
@@ -588,27 +683,22 @@ publishedAt
 source
 title
 url
-```
 
 The test request was recorded in the persistent usage ledger.
 
 The connection-test article was used for integration validation rather than treated as part of the research corpus.
 
----
-
-## Controlled Candidate Acquisition
+Controlled Candidate Acquisition
 
 The first controlled candidate acquisition requested five articles, corresponding to the configured per-request research limit.
 
 The initial acquisition produced:
 
-```text id="ztadzn"
 Articles requested         5
 Articles returned          5
 Technically eligible       3
 Technically ineligible     2
 Stored source records      5
-```
 
 All five returned provider records were preserved.
 
@@ -616,36 +706,35 @@ Technical ineligibility does not result in deletion of the original source recor
 
 This allows the exclusion process itself to remain auditable.
 
----
-
-## Persistent Original-Source Storage
+Persistent Original-Source Storage
 
 Each acquisition batch is stored as a timestamped research object containing:
 
-* acquisition batch identifier;
-* UTC acquisition timestamp;
-* provider;
-* source-record schema version;
-* complete raw API response;
-* canonical Media AI source records.
+acquisition batch identifier;
+
+UTC acquisition timestamp;
+
+provider;
+
+source-record schema version;
+
+complete raw API response;
+
+canonical Media AI source records.
 
 Existing acquisition batches are not deliberately overwritten.
 
 This permits later reconstruction of the input to the eligibility and preparation stages.
 
----
-
-## Eligibility Review
+Eligibility Review
 
 The first acquisition batch produced:
 
-```text id="bntv43"
 Source records reviewed     5
 Technical exclusions        2
 Exact duplicates            0
 Eligible unique records     3
 Sampling seed               42
-```
 
 Exact duplicate control was applied after technical eligibility.
 
@@ -653,21 +742,16 @@ The resulting eligible records were placed into a reproducible random order usin
 
 Near-duplicate analysis remains deferred to Notebook 02.
 
----
-
-## First Acquisition Audit
+First Acquisition Audit
 
 At completion of the first acquisition cycle, the persistent usage ledger reported:
 
-```text id="d1azfe"
 API requests recorded       2
 Articles requested          6
 Articles returned           6
-```
 
 The totals reconcile as:
 
-```text id="4lb8m9"
 1 controlled connection-test request
 +
 1 five-article candidate acquisition request
@@ -679,51 +763,59 @@ The totals reconcile as:
 5 candidate articles
 =
 6 articles requested and returned
-```
 
 This accounting confirms that connection-test traffic and research acquisition traffic are both represented in the persistent usage record.
 
----
-
-## Notebook 01 Handover Manifest
+Notebook 01 Handover Manifest
 
 Notebook 01 produces:
 
-```text id="d10fq1"
 notebook_01_handover_manifest.json
-```
 
 The manifest records the information required for Notebook 02 to identify and verify its input without relying on temporary Colab state.
 
 It contains:
 
-* project metadata;
-* source provider;
-* source-record schema version;
-* acquisition batch identifier;
-* acquisition batch storage reference;
-* reviewed candidate file reference;
-* source-record counts;
-* technical exclusion count;
-* exact-duplicate count;
-* candidate-record count;
-* language criterion;
-* article-length criterion;
-* sampling seed;
-* content-neutral selection settings;
-* persistent API usage summary;
-* relevant research storage references;
-* planned Notebook 02 processing stage.
+project metadata;
+
+source provider;
+
+source-record schema version;
+
+acquisition batch identifier;
+
+acquisition batch storage reference;
+
+reviewed candidate file reference;
+
+source-record counts;
+
+technical exclusion count;
+
+exact-duplicate count;
+
+candidate-record count;
+
+language criterion;
+
+article-length criterion;
+
+sampling seed;
+
+content-neutral selection settings;
+
+persistent API usage summary;
+
+relevant research storage references;
+
+planned Notebook 02 processing stage.
 
 The manifest explicitly records that API credentials are not contained in the handover data.
 
----
-
-## Notebook 01 Result
+Notebook 01 Result
 
 Notebook 01 establishes a complete reproducible acquisition path:
 
-```text id="nnmhjr"
 Research Environment
         ↓
 Restricted Persistent Storage
@@ -749,7 +841,6 @@ Reproducible Random Ordering
 Acquisition Audit
         ↓
 Notebook 02 Handover
-```
 
 The first controlled pilot run resulted in three technically eligible, unique candidate articles from five acquired research records.
 
@@ -757,9 +848,7 @@ No semantic sanitisation, emotional analysis, framing classification or model in
 
 The original source records remain unchanged.
 
----
-
-## Handover to Notebook 02
+Handover to Notebook 02
 
 Notebook 02 begins from the persistent acquisition manifest rather than making new API requests.
 
@@ -767,7 +856,6 @@ Its responsibility is to create derived analytical data while preserving the ori
 
 The next stage will therefore begin with:
 
-```text id="0id2my"
 Load Handover Manifest
         ↓
 Verify Input Integrity
@@ -789,113 +877,150 @@ Sequence Construction
 Dataset Quality Diagnostics
         ↓
 Prepared Corpus
-```
 
 The governing principle for Notebook 02 is:
 
-> **Sanitise structure, not meaning.**
+Sanitise structure, not meaning.
 
 Technical artefacts may be removed or normalised, but wording relevant to factual, emotional, psychological or social interpretation must not be neutralised merely because it may later influence Media AI measurements.
 
-### Notebook 02 — Data Sanitisation and Preparation
+Notebook 02 — Data Sanitisation and Preparation
 
 Notebook 02 transforms the acquisition output from Notebook 01 into a
 structurally prepared and auditable research corpus while preserving the
 original source records.
 
-The notebook deliberately separates **technical preparation** from later
+The notebook deliberately separates technical preparation from later
 semantic supervision and modelling. It does not assign emotional or
 factological weights and does not perform model-specific tokenisation.
 
 The preparation pipeline includes:
 
-1. **Handover loading and schema compatibility**
-   - Loads the persistent Notebook 01 handover and candidate records.
-   - Verifies record counts, identifiers, fingerprints and source-record
-     integrity.
-   - Supports historical source-schema versions without rewriting the original
-     records.
+Handover loading and schema compatibility
 
-2. **Technical sanitisation**
-   - Creates separate sanitised representations while preserving the source
-     records unchanged.
-   - Removes only defined technical artefacts such as invalid control
-     characters or markup when present.
-   - Records every detected transformation in the sanitisation audit.
+Loads the persistent Notebook 01 handover and candidate records.
 
-3. **Sanitisation audit**
-   - Compares source and sanitised representations.
-   - Treats unchanged records as valid outcomes.
-   - Verifies that technical preparation has not introduced unintended textual
-     changes.
+Verifies record counts, identifiers, fingerprints and source-record
+integrity.
 
-4. **Near-duplicate assessment**
-   - Performs lexical similarity analysis across candidate articles.
-   - Identifies records that may require review without automatically removing
-     them.
-   - Keeps similarity diagnostics separate from semantic similarity.
+Supports historical source-schema versions without rewriting the original
+records.
 
-5. **Hierarchical article segmentation**
-   - Derives traceable article → paragraph → sentence representations.
-   - Preserves the complete sanitised article text.
-   - Verifies reconstruction of the article from the derived hierarchy.
-   - Does not create permanent model-specific tokens.
+Technical sanitisation
 
-6. **Dataset quality diagnostics**
-   - Evaluates structural characteristics such as article, paragraph and
-     sentence lengths.
-   - Flags unusual structural conditions for review rather than exclusion.
-   - Consolidates sanitisation, segmentation and near-duplicate warnings.
-   - Keeps quality flags descriptive rather than semantic judgements.
+Creates separate sanitised representations while preserving the source
+records unchanged.
 
-7. **Persistent prepared corpus**
-   - Persists the canonical prepared corpus and diagnostic artefacts to Google
-     Drive.
-   - Stores complete sanitised text together with its traceable structural
-     hierarchy.
-   - Reloads persisted artefacts to verify that the research handover does not
-     depend on temporary notebook memory.
+Removes only defined technical artefacts such as invalid control
+characters or markup when present.
 
-8. **Final audit and Notebook 03 handover**
-   - Independently verifies persisted counts, identifiers, parent links,
-     diagnostic artefacts and preservation guarantees.
-   - Reports structural review flags explicitly.
-   - Creates the formal handover to
-     `03_supervision_and_annotation`.
+Records every detected transformation in the sanitisation audit.
 
-#### Methodological boundary
+Sanitisation audit
 
-Notebook 02 operates only on the **structural preparation layer**.
+Compares source and sanitised representations.
+
+Treats unchanged records as valid outcomes.
+
+Verifies that technical preparation has not introduced unintended textual
+changes.
+
+Near-duplicate assessment
+
+Performs lexical similarity analysis across candidate articles.
+
+Identifies records that may require review without automatically removing
+them.
+
+Keeps similarity diagnostics separate from semantic similarity.
+
+Hierarchical article segmentation
+
+Derives traceable article → paragraph → sentence representations.
+
+Preserves the complete sanitised article text.
+
+Verifies reconstruction of the article from the derived hierarchy.
+
+Does not create permanent model-specific tokens.
+
+Dataset quality diagnostics
+
+Evaluates structural characteristics such as article, paragraph and
+sentence lengths.
+
+Flags unusual structural conditions for review rather than exclusion.
+
+Consolidates sanitisation, segmentation and near-duplicate warnings.
+
+Keeps quality flags descriptive rather than semantic judgements.
+
+Persistent prepared corpus
+
+Persists the canonical prepared corpus and diagnostic artefacts to Google
+Drive.
+
+Stores complete sanitised text together with its traceable structural
+hierarchy.
+
+Reloads persisted artefacts to verify that the research handover does not
+depend on temporary notebook memory.
+
+Final audit and Notebook 03 handover
+
+Independently verifies persisted counts, identifiers, parent links,
+diagnostic artefacts and preservation guarantees.
+
+Reports structural review flags explicitly.
+
+Creates the formal handover to
+03_supervision_and_annotation.
+
+Methodological boundary
+
+Notebook 02 operates only on the structural preparation layer.
 
 At the Notebook 02 → Notebook 03 boundary:
 
-- complete sanitised article text is preserved;
-- original source records remain unchanged;
-- article, paragraph and sentence traceability is preserved;
-- no permanent model-specific tokenisation has been created;
-- no emotional tokens have been pre-filtered;
-- no emotional weights have been assigned;
-- no factological weights have been assigned;
-- no recurrent states have been calculated;
-- no confluent representation has been calculated.
+complete sanitised article text is preserved;
+
+original source records remain unchanged;
+
+article, paragraph and sentence traceability is preserved;
+
+no permanent model-specific tokenisation has been created;
+
+no emotional tokens have been pre-filtered;
+
+no emotional weights have been assigned;
+
+no factological weights have been assigned;
+
+no recurrent states have been calculated;
+
+no confluent representation has been calculated.
 
 This boundary is intentional. Semantic supervision and annotation are introduced
 only in Notebook 03, while trainable transformative, recurrent and confluent
 model components are introduced in later stages.
 
-#### Persisted outputs
+Persisted outputs
 
 Notebook 02 produces the following principal research artefacts:
 
-- `notebook_02_prepared_corpus.json`
-- `notebook_02_sanitisation_audit.json`
-- `notebook_02_near_duplicate_review.json`
-- `notebook_02_quality_diagnostics.json`
-- `notebook_02_handover_manifest.json`
+notebook_02_prepared_corpus.json
+
+notebook_02_sanitisation_audit.json
+
+notebook_02_near_duplicate_review.json
+
+notebook_02_quality_diagnostics.json
+
+notebook_02_handover_manifest.json
 
 The prepared corpus is the canonical input to Notebook 03.
 
-### Notebook 03 — Supervision and Annotation
+Notebook 03 — Supervision and Annotation
 
 Notebook 03 establishes the supervision and annotation framework used to create
 traceable training and evaluation signals for the Media AI architecture.
@@ -904,116 +1029,150 @@ The notebook receives the persistent prepared corpus from Notebook 02 and
 operationalises the emotional and factological constructs required for later
 model development.
 
-It deliberately separates **supervision** from **model architecture and
-training**. No transformative, recurrent or confluent model component is
+It deliberately separates supervision from model architecture and
+training. No transformative, recurrent or confluent model component is
 trained in this notebook.
 
 The supervision pipeline includes:
 
-1. **Prepared-corpus handover and verification**
+Prepared-corpus handover and verification
 
-   * Loads the persistent Notebook 02 handover manifest and prepared corpus.
-   * Reconstructs the research input independently of temporary Notebook 02
-     objects.
-   * Verifies article, paragraph and sentence counts and preservation
-     guarantees.
-   * Confirms that no emotional or factological weights have already been
-     assigned.
+Loads the persistent Notebook 02 handover manifest and prepared corpus.
 
-2. **Annotation schema**
+Reconstructs the research input independently of temporary Notebook 02
+objects.
 
-   * Defines sentence-level supervision with preceding article context.
-   * Operationalises 11 emotional dimensions and 8 factological components.
-   * Separates reported emotion, transformative emotion and immediate emotional
-     state.
-   * Represents transformative emotion as a signed change on `[-1, +1]`.
-   * Keeps immediate emotional state and supervision weights non-negative.
-   * Leaves activation functions and recurrent-state computation to the model
-     architecture rather than prescribing them through the annotation schema.
+Verifies article, paragraph and sentence counts and preservation
+guarantees.
 
-3. **Traceable supervision records**
+Confirms that no emotional or factological weights have already been
+assigned.
 
-   * Constructs one supervision context and blank annotation record for every
-     prepared sentence.
-   * Preserves Media AI article, paragraph and sentence identifiers together
-     with their structural indices.
-   * Maintains preceding context without exposing future article context.
-   * Keeps annotations separate from the prepared corpus.
+Annotation schema
 
-4. **Independent LLM supervision protocol**
+Defines sentence-level supervision with preceding article context.
 
-   * Defines provider-independent supervision instructions and structured output
-     requirements.
-   * Prevents supervisors from receiving future context, another supervisor's
-     labels or Media AI model predictions.
-   * Preserves supervisor identity and annotation provenance.
-   * Supports independent comparison across multiple model families.
+Operationalises 11 emotional dimensions and 8 factological components.
 
-5. **Controlled supervisor execution**
+Separates reported emotion, transformative emotion and immediate emotional
+state.
 
-   * Provides a stable five-slot supervisor registry.
-   * Allows individual supervisors to be enabled or disabled centrally.
-   * Separates provider configuration, credentials, implementation status and
-     execution readiness.
-   * Retains raw provider responses separately for subsequent validation.
-   * Supports tightly limited pilot execution before corpus-scale supervision.
-   * Keeps external LLM supervision disabled by default.
+Represents transformative emotion as a signed change on [-1, +1].
 
-6. **Supervision validation**
+Keeps immediate emotional state and supervision weights non-negative.
 
-   * Standardises successful supervisor outputs into the Media AI annotation
-     structure.
-   * Validates schema compliance, allowed ranges, evidence and provenance before
-     annotations are accepted.
-   * Separates accepted supervision from rejected responses and diagnostic
-     reasons.
-   * Does not silently repair malformed supervision into valid reference data.
+Leaves activation functions and recurrent-state computation to the model
+architecture rather than prescribing them through the annotation schema.
 
-7. **Supervisor agreement and disagreement**
+Traceable supervision records
 
-   * Aligns independent annotations through their sentence identifiers.
-   * Supports pairwise comparison when multiple supervisors annotate the same
-     sentence.
-   * Measures differences in continuous supervision signals.
-   * Separately evaluates the direction of signed transformative emotion.
-   * Compares factological components through exact agreement.
-   * Treats disagreement as a review signal rather than an automatic error or
-     exclusion criterion.
-   * Does not construct implicit consensus through averaging, voting or
-     supervisor ranking.
+Constructs one supervision context and blank annotation record for every
+prepared sentence.
 
-8. **Reference-dataset construction**
+Preserves Media AI article, paragraph and sentence identifiers together
+with their structural indices.
 
-   * Provides a versioned layer for converting validated supervision into
-     downstream research records.
-   * Distinguishes `machine_supervision`, `human_reviewed`,
-     `adjudicated_reference` and `not_reference_ready` states.
-   * Separates annotation validity from reference-label status.
-   * Does not automatically treat independent LLM supervision as human-reviewed
-     or adjudicated ground truth.
-   * Keeps construction and persistent storage under independent execution
-     controls.
+Maintains preceding context without exposing future article context.
 
-9. **Final audit and Notebook 04 readiness**
+Keeps annotations separate from the prepared corpus.
 
-   * Independently verifies the prepared input, annotation schema, supervision
-     contexts, LLM protocol, supervisor registry, validation layer, comparison
-     layer and reference-dataset infrastructure.
-   * Distinguishes **Notebook 03 pipeline completeness** from **Notebook 04
-     supervision-data readiness**.
-   * Reports explicit readiness blockers when live supervision, reference-data
-     construction or persistence has not yet occurred.
-   * Prevents the existence of supervision infrastructure from being mistaken
-     for the existence of a completed reference dataset.
+Independent LLM supervision protocol
 
-#### Current pilot state
+Defines provider-independent supervision instructions and structured output
+requirements.
+
+Prevents supervisors from receiving future context, another supervisor's
+labels or Media AI model predictions.
+
+Preserves supervisor identity and annotation provenance.
+
+Supports independent comparison across multiple model families.
+
+Controlled supervisor execution
+
+Provides a stable five-slot supervisor registry.
+
+Allows individual supervisors to be enabled or disabled centrally.
+
+Separates provider configuration, credentials, implementation status and
+execution readiness.
+
+Retains raw provider responses separately for subsequent validation.
+
+Supports tightly limited pilot execution before corpus-scale supervision.
+
+Keeps external LLM supervision disabled by default.
+
+Supervision validation
+
+Standardises successful supervisor outputs into the Media AI annotation
+structure.
+
+Validates schema compliance, allowed ranges, evidence and provenance before
+annotations are accepted.
+
+Separates accepted supervision from rejected responses and diagnostic
+reasons.
+
+Does not silently repair malformed supervision into valid reference data.
+
+Supervisor agreement and disagreement
+
+Aligns independent annotations through their sentence identifiers.
+
+Supports pairwise comparison when multiple supervisors annotate the same
+sentence.
+
+Measures differences in continuous supervision signals.
+
+Separately evaluates the direction of signed transformative emotion.
+
+Compares factological components through exact agreement.
+
+Treats disagreement as a review signal rather than an automatic error or
+exclusion criterion.
+
+Does not construct implicit consensus through averaging, voting or
+supervisor ranking.
+
+Reference-dataset construction
+
+Provides a versioned layer for converting validated supervision into
+downstream research records.
+
+Distinguishes machine_supervision, human_reviewed,
+adjudicated_reference and not_reference_ready states.
+
+Separates annotation validity from reference-label status.
+
+Does not automatically treat independent LLM supervision as human-reviewed
+or adjudicated ground truth.
+
+Keeps construction and persistent storage under independent execution
+controls.
+
+Final audit and Notebook 04 readiness
+
+Independently verifies the prepared input, annotation schema, supervision
+contexts, LLM protocol, supervisor registry, validation layer, comparison
+layer and reference-dataset infrastructure.
+
+Distinguishes Notebook 03 pipeline completeness from Notebook 04
+supervision-data readiness.
+
+Reports explicit readiness blockers when live supervision, reference-data
+construction or persistence has not yet occurred.
+
+Prevents the existence of supervision infrastructure from being mistaken
+for the existence of a completed reference dataset.
+
+Current pilot state
 
 The Notebook 03 supervision infrastructure has been implemented and passes its
 final structural and methodological audit.
 
 The current prepared input contains:
 
-```text
 Articles                    3
 Paragraphs                  3
 Sentences                  54
@@ -1021,13 +1180,11 @@ Supervision contexts       54
 LLM supervision payloads   54
 Invalid payloads             0
 Supervisor slots             5
-```
 
 External LLM supervision remains disabled at the current checkpoint.
 
 Consequently:
 
-```text
 Raw supervision responses    0
 Accepted annotations          0
 Rejected annotations          0
@@ -1035,7 +1192,6 @@ Reference records             0
 
 Notebook 03 pipeline complete True
 Notebook 04 data ready        False
-```
 
 This is an intentional pre-supervision state rather than a failed pipeline.
 
@@ -1043,55 +1199,868 @@ The initial live experiment will begin with a single enabled supervisor and a
 strictly limited pilot request before supervision is expanded to the prepared
 corpus.
 
-#### Methodological boundary
+Methodological boundary
 
-Notebook 03 operates only on the **supervision and annotation layer**.
+Notebook 03 operates only on the supervision and annotation layer.
 
 At the Notebook 03 → Notebook 04 boundary:
 
-* complete prepared text remains preserved;
-* structural traceability remains intact;
-* annotations remain derived research artefacts;
-* reported and transformative emotion remain separate constructs;
-* signed transformation is distinguished from non-negative emotional state;
-* independent supervisor outputs remain independently identifiable;
-* disagreement is not automatically converted into consensus;
-* machine supervision is not automatically treated as adjudicated ground truth;
-* no permanent model-specific tokenisation has been introduced;
-* no model training has been performed;
-* no recurrent state has been calculated;
-* no confluent representation has been calculated.
+complete prepared text remains preserved;
+
+structural traceability remains intact;
+
+annotations remain derived research artefacts;
+
+reported and transformative emotion remain separate constructs;
+
+signed transformation is distinguished from non-negative emotional state;
+
+independent supervisor outputs remain independently identifiable;
+
+disagreement is not automatically converted into consensus;
+
+machine supervision is not automatically treated as adjudicated ground truth;
+
+no permanent model-specific tokenisation has been introduced;
+
+no model training has been performed;
+
+no recurrent state has been calculated;
+
+no confluent representation has been calculated.
 
 Notebook 04 becomes data-ready only after valid supervision has been produced,
 the reference dataset has been constructed and the required handover artefacts
 have been persisted.
 
-#### Planned handover
+Notebook 04 — Representation and Model Architecture
 
-Once live supervision and reference-dataset construction are enabled, Notebook
-03 will provide the versioned supervision artefacts required by:
+Objective
 
-`04_transformative_recurrent_and_confluent_architecture.ipynb`
+Notebook 04 forms the architectural bridge between supervision and experimentation. It receives the prepared corpus and supervision contracts established upstream and defines hierarchical Media AI representations while preserving traceability to the original text.
 
-The handover will preserve the relationship between prepared textual evidence,
-supervisor provenance, validated annotation records and downstream model
-training.
+The notebook formalises the four textual levels:
 
-This maintains the research sequence:
+Token → Sentence → Paragraph → Article
 
-```text
-Prepared Corpus
-        ↓
-Independent Supervision
-        ↓
-Validation
-        ↓
-Agreement / Review Diagnostics
-        ↓
-Reference Dataset
-        ↓
-Notebook 04 Model Architecture and Training
-```
+and the three principal representational spaces:
 
-Model architecture, recurrent-state computation and confluent representation
-remain outside the scope of Notebook 03.
+Factual → Psychological → Social
+
+Its purpose is architectural rather than interpretive: it establishes how contextual semantic information can be projected into Media AI-specific spaces without relabelling Transformer attention as emotional or social explanation.
+
+Architectural role
+
+Notebook 04 introduces the representation design subsequently inherited and validated by later notebooks. It establishes the separation between:
+
+contextual backbone state;
+
+global confluent representation;
+
+pathway-specific representation;
+
+downstream transformative state;
+
+recurrent state;
+
+later Transformative-Weight gating.
+
+This separation becomes essential in Notebooks 08–10, where parameter ownership and training scope are audited explicitly.
+
+Notebook 05 — Contextual Representation and Experimental Preparation
+
+Objective
+
+Notebook 05 constructs the contextual sentence representations used by the downstream Media AI architecture and establishes the experimental handover required by later pathway notebooks.
+
+The canonical contextual representation contract uses:
+
+Encoder model       sentence-transformers/all-mpnet-base-v2
+Embedding dimension 768
+
+The persisted contextual sentence representations preserve article and sentence identity and become the model input used by the later representation architecture.
+
+The current validated pilot corpus contains:
+
+Articles   3
+Sentences 54
+Dimension 768
+
+Notebook 05 also establishes the experimental framing for later baseline comparison, controlled ablation, recurrent trajectory analysis and attribution.
+
+Notebook 06 — Factual Representation Path
+
+Objective
+
+Notebook 06 operationalises and validates the factual pathway required by the Media AI representation architecture.
+
+The factual pathway ultimately exposes a 10-dimensional representation and produces the persisted factual supervision contract later recovered by Notebooks 09 and 10:
+
+notebook_06_factual_target_contract.json
+
+This contract is used to align factual current-state supervision to the canonical sentence corpus and to reconstruct signed factual transformation targets.
+
+The factual pathway is kept conceptually distinct from truth probability. It represents operationalised informational characteristics rather than a claim that the model has established whether a statement is true.
+
+Notebook 07 — Social Representation and Architecture Finalisation
+
+Objective
+
+Notebook 07 finalises the inherited representation architecture and the social pathway before transformative recurrence is introduced.
+
+The final restored representation architecture is:
+
+Backbone
+Linear(768 → 768)
+
+Global confluent
+Linear(768 → 256)
+GELU
+Dropout(0.10)
+LayerNorm(256)
+
+Representation core
+Linear(256 → 128)
+GELU
+Dropout(0.10)
+LayerNorm(128)
+
+Psychological output
+Linear(128 → 34)
+
+Factual output
+Linear(128 → 10)
+
+Social output
+Linear(128 → 7)
+
+Parameter accounting:
+
+Module
+
+Parameters
+
+Backbone
+
+590,592
+
+Global confluent
+
+197,376
+
+Psychological path
+
+37,538
+
+Factual path
+
+34,442
+
+Social path
+
+34,055
+
+Total representation architecture
+
+894,003
+
+The accepted social supervision contract contains seven dimensions:
+
+interpersonal_cohesion
+economic_cohesion
+political_cohesion
+religious_cohesion
+group_collective_cohesion
+institutional_role_relation
+public_audience_relation
+
+Notebook 07 persists the architecture required by Notebook 08 and confirms that no transformative state exists at the handover boundary.
+
+Notebook 08 — Transformative Mechanism
+
+Objective
+
+Notebook 08 adds pathway-specific transformative modules to the frozen representation architecture.
+
+For pathway (p), the transformative module receives the current representation and preceding recurrent state:
+
+$$
+u_t^{(p)} =
+\left[
+z_t^{(p)};
+r_{t-1}^{(p)}
+\right]
+$$
+
+and produces a candidate signed transformation:
+
+$$
+\Delta_t^{(p)} = T_p\left(u_t^{(p)}\right)
+$$
+
+Transformative modules
+
+Pathway
+
+Input
+
+Hidden
+
+Output
+
+Parameters
+
+Factual
+
+20
+
+20
+
+10
+
+670
+
+Psychological
+
+68
+
+68
+
+34
+
+7,174
+
+Social
+
+14
+
+14
+
+7
+
+343
+
+Total
+
+
+
+
+
+
+
+8,187
+
+Each module uses:
+
+Linear
+GELU
+Dropout(0.10)
+LayerNorm
+Linear
+
+Controlled forward-path validation confirmed correct shapes, finite outputs and deterministic evaluation behaviour.
+
+The inherited representation architecture remains frozen while the transformative mechanism is constructed and validated.
+
+Notebook 09 — Transformative-Weight and Recurrent Architecture
+
+Objective
+
+Notebook 09 introduces the Transformative-Weight mechanism and formalises causal recurrent state propagation.
+
+Transformative Weight is distinct from:
+
+Transformer attention;
+
+candidate transformation;
+
+pathway loss weighting;
+
+recurrent state itself.
+
+It is a dimension-wise gate determining how strongly each candidate transformation contributes to the recurrent update.
+
+Structural contract
+
+The complete Transformative-Weight space contains 51 structural dimensions:
+
+Factual        10
+Psychological  34
+Social          7
+Total          51
+
+Of these, 49 are activation-eligible and trainable. Two social dimensions remain deferred.
+
+Active latent parameters are mapped through the sigmoid function:
+
+$$
+w_d = \sigma(\alpha_d)
+$$
+
+At construction:
+
+$$
+\alpha_d = 0
+\quad\Rightarrow\quad
+w_d = 0.5
+$$
+
+Deferred dimensions remain exactly zero.
+
+Recurrent contract
+
+The validated recurrent update is additive:
+
+r_{t-1}^{(p)}
++
+w^{(p)} \odot \Delta_t^{(p)}
+$$
+
+with:
+
+deterministic zero initial state;
+
+reset at every article boundary;
+
+no cross-article propagation;
+
+no cross-pathway recurrence;
+
+no future context;
+
+no supervision supplied as recurrent model input.
+
+Supervision alignment
+
+Notebook 09 recovered:
+
+Pathway
+
+Current-state available
+
+Transformation-target available
+
+Objective-active
+
+Factual
+
+536 / 540
+
+534 / 540
+
+534
+
+Psychological
+
+1,656 / 1,836
+
+1,606 / 1,836
+
+1,606
+
+Social
+
+155 / 378
+
+120 / 378
+
+120
+
+Initial controlled objective
+
+Before Transformative-Weight training:
+
+Pathway
+
+Masked MSE
+
+Factual
+
+0.28182298
+
+Psychological
+
+0.08874305
+
+Social
+
+0.26135439
+
+Equal-pathway total
+
+0.21064013
+
+Controlled Transformative-Weight training
+
+Only the 49 latent Transformative-Weight parameters were supplied to AdamW.
+
+Optimizer             AdamW
+Learning rate         0.001
+Weight decay          0.0001
+Maximum gradient norm 1.0
+Epochs                25
+
+After controlled training:
+
+Pathway
+
+Initial MSE
+
+Final MSE
+
+Delta
+
+Factual
+
+0.28182298
+
+0.28011325
+
+-0.00170973
+
+Psychological
+
+0.08874305
+
+0.08706581
+
+-0.00167724
+
+Social
+
+0.26135439
+
+0.25857118
+
+-0.00278321
+
+Total
+
+0.21064013
+
+0.20858341
+
+-0.00205672
+
+All 894,003 representation parameters and all 8,187 transformative parameters remained frozen and unchanged.
+
+Persistent handover
+
+Notebook 09 persists:
+
+notebook_09_final_checkpoint.pt
+notebook_09_final_metadata.json
+
+The checkpoint contains the complete 902,239-parameter architecture and is independently read back and validated before Notebook 10 restoration.
+
+Article-specific runtime recurrent states are not persisted as learned model state.
+
+Notebook 10 — Multi-Article Validation and Pilot Completion
+
+Objective
+
+Notebook 10 restores the complete Notebook 09 architecture from persistent artefacts and validates the model as a reproducible multi-article causal system.
+
+It does not silently treat the three-article pilot corpus as an expanded generalisation dataset. Instead, it distinguishes:
+
+multi-article architectural validation;
+
+continued in-sample pilot optimisation;
+
+future expanded-corpus and held-out evaluation.
+
+Persistent restoration
+
+Notebook 10 restores and validates:
+
+Representation parameters       894,003
+Transformative parameters         8,187
+Transformative Weight params         49
+Total model parameters          902,239
+Structural TW dimensions             51
+Active TW dimensions                 49
+Deferred TW dimensions                2
+
+The complete architecture is restored frozen and in evaluation mode before any Notebook 10 execution.
+
+Corpus validation
+
+The validated corpus contains:
+
+Articles                         3
+Canonical sentences             54
+Contextual representation dim. 768
+Representation coverage       100%
+Synthetic fallback used       False
+
+The corpus preserves explicit article boundaries, globally unique sentence identities, canonical sequence order and contextual representation alignment.
+
+Multi-article recurrent validation
+
+Notebook 10 traverses all 54 sentences through the frozen architecture.
+
+For every article:
+
+$$
+r_0^{(p)} = \mathbf{0}
+$$
+
+and recurrent state is discarded before the next article begins.
+
+Validation confirmed:
+
+fresh zero initial states;
+
+independent article reset storage;
+
+no cross-article state propagation;
+
+no future context;
+
+no supervision used as model input;
+
+correct representation, candidate and recurrent-state shapes;
+
+finite candidate transformations and states;
+
+exact deferred-dimension inactivity;
+
+deterministic repeated corpus execution.
+
+Expanded supervision alignment
+
+Notebook 10 independently reconstructs the supervision and transformation-target contract over the canonical corpus.
+
+Current-state availability:
+
+Pathway
+
+Available
+
+Supervised sentences
+
+Supervised articles
+
+Factual
+
+536 / 540
+
+54 / 54
+
+3 / 3
+
+Psychological
+
+1,656 / 1,836
+
+54 / 54
+
+3 / 3
+
+Social
+
+155 / 378
+
+51 / 54
+
+3 / 3
+
+Derived objective-active transformation targets remain:
+
+Factual        534
+Psychological 1606
+Social         120
+
+Notebook 10 pre-training baseline
+
+The inherited Notebook 09 trained state produces:
+
+Pathway
+
+Masked MSE
+
+Factual
+
+0.28011322
+
+Psychological
+
+0.08706581
+
+Social
+
+0.25857112
+
+Equal-pathway total
+
+0.20858338
+
+The objective is evaluated twice before optimisation and reproduces deterministically.
+
+Continued pilot optimisation
+
+Notebook 10 then performs another controlled 25-epoch optimisation of only the 49 Transformative-Weight parameters.
+
+The result is:
+
+Pathway
+
+Baseline MSE
+
+Final MSE
+
+Delta
+
+Factual
+
+0.28011322
+
+0.27843508
+
+-0.00167814
+
+Psychological
+
+0.08706581
+
+0.08543939
+
+-0.00162642
+
+Social
+
+0.25857112
+
+0.25579539
+
+-0.00277573
+
+Total
+
+0.20858338
+
+0.20655662
+
+-0.00202676
+
+All learned effective weights remain finite and bounded. Deferred social dimensions remain fixed at zero.
+
+Post-training recurrent validation
+
+Notebook 10 independently reproduces the complete post-training objective and recurrent trajectories without further optimisation.
+
+The Block 9 result is reproduced exactly:
+
+0.20655662
+$$
+
+against the immutable Block 8 baseline:
+
+0.20858338
+$$
+
+so that:
+
+-0.00202676
+$$
+
+The architecture remains unchanged during validation and no optimiser, backward pass or parameter update is executed.
+
+Pilot Results
+
+Objective progression
+
+xychart-beta
+    title "Controlled pilot objective progression"
+    x-axis ["N09 pre-training", "N09 post-training", "N10 baseline", "N10 post-training"]
+    y-axis "Equal-pathway masked MSE" 0.20 --> 0.215
+    line [0.21064013, 0.20858341, 0.20858338, 0.20655662]
+
+The small difference between the Notebook 09 post-training value and Notebook 10 restored baseline reflects numerical reproduction at the validated runtime boundary, not a new training stage.
+
+Pathway-specific Notebook 10 change
+
+xychart-beta
+    title "Notebook 10 pathway objective comparison"
+    x-axis ["Factual", "Psychological", "Social"]
+    y-axis "Masked MSE" 0 --> 0.30
+    bar [0.28011322, 0.08706581, 0.25857112]
+    bar [0.27843508, 0.08543939, 0.25579539]
+
+First series: inherited baseline.
+Second series: post-training objective.
+
+What the pilot establishes
+
+The completed pilot provides evidence that:
+
+the representation, transformative, gating and recurrent components can be composed into one deterministic architecture;
+
+the complete model can be persisted and restored independently;
+
+causal article-local recurrent trajectories can be executed without future leakage;
+
+missing supervision can be masked without being confused with genuine zero values;
+
+deferred dimensions can remain structurally present without becoming trainable;
+
+optimisation can be restricted exactly to the intended 49 Transformative-Weight parameters;
+
+the controlled objective can be reduced while the 902,190 inherited representation and transformative parameters remain frozen;
+
+repeated post-training evaluation reproduces the same recurrent objective and trajectories.
+
+What the pilot does not establish
+
+The current project does not establish:
+
+out-of-sample generalisation;
+
+cross-source robustness;
+
+cross-topic robustness;
+
+temporal generalisation;
+
+psychological effects on real readers;
+
+factual truth of model-assigned factual representations;
+
+superiority over external state-of-the-art systems;
+
+causal media effects in human populations.
+
+The current result classification is therefore:
+
+controlled_in_sample_pilot_optimisation
+
+not final model performance.
+
+Reproducibility and Execution Boundaries
+
+Persistent state
+
+Later notebooks restore validated state from persistent Google Drive artefacts rather than requiring upstream notebooks to remain in Colab memory.
+
+This is particularly important at the Notebook 09 → Notebook 10 boundary, where the complete architecture is restored from the final checkpoint and metadata contract.
+
+Parameter ownership
+
+The final pilot separates parameter ownership explicitly:
+
+Representation architecture       894,003  frozen
+Transformative architecture         8,187  frozen
+Transformative Weight                  49  controlled trainable scope
+----------------------------------------------------
+Total                              902,239
+
+During final post-training validation all parameters are frozen.
+
+Determinism
+
+The project uses:
+
+RANDOM_SEED = 42
+
+where applicable and validates deterministic repeated execution at critical forward and recurrent boundaries.
+
+Causal safeguards
+
+The recurrent architecture enforces:
+
+Sequence order preserved      True
+Batch shuffling               False
+Future context allowed        False
+Article-boundary reset        True
+Cross-article propagation     False
+Cross-pathway recurrence      False
+Supervision as model input    False
+
+Interpretation and Traceability
+
+Media AI is designed so that broad conclusions remain decomposable.
+
+A future inspection interface should allow movement between:
+
+Article
+  ↓
+Paragraph
+  ↓
+Sentence
+  ↓
+Contextual token
+
+and between:
+
+Factual representation
+Psychological representation
+Social representation
+Candidate transformation
+Transformative Weight
+Weighted transformation
+Recurrent state
+
+Colour overlays are intended as a visual projection of these numerical states rather than independent evidence.
+
+Next Research Stage
+
+The completed ten-notebook sequence should be treated as the architectural pilot.
+
+The next research stage requires a genuinely expanded corpus with explicit training, validation and held-out test partitions. The most important next steps are:
+
+acquire and prepare substantially more independent articles without topic-directed sampling;
+
+construct validated supervision for the expanded corpus;
+
+define article-level train/validation/test separation before optimisation;
+
+evaluate out-of-sample recurrent objectives;
+
+compare against simpler backbone and projection baselines;
+
+perform component ablations for transformative, recurrent, confluent and Transformative-Weight mechanisms;
+
+test directional symmetry and controlled counterfactuals;
+
+evaluate cross-source, cross-topic and temporal robustness;
+
+develop hierarchical attribution and colour-based inspection;
+
+report uncertainty and limitations alongside all model estimates.
+
+Only after those stages should claims about generalisation or architectural superiority be considered.
+
+Project Status
+
+Data acquisition and traceability             Complete for pilot
+Sanitisation and structural preparation       Complete for pilot
+Supervision framework                         Complete for pilot
+Representation architecture                   Complete
+Factual pathway                               Complete
+Social pathway                                Complete
+Transformative mechanism                      Complete
+Transformative-Weight mechanism               Complete
+Causal recurrent architecture                 Complete
+Persistent Notebook 09 → 10 restoration       Complete
+Multi-article recurrent validation            Complete
+Controlled in-sample pilot optimisation       Complete
+Post-training deterministic validation        Complete
+
+Expanded independent corpus                   Required
+Held-out evaluation                           Required
+Generalisation evidence                       Not yet established
+Final research conclusions                    Not yet established
+
+Research Position
+
+Media AI should currently be understood as a validated architectural research prototype.
+
+Its central contribution is the explicit computational separation of:
+
+contextual representation → candidate transformation → learned transformation weight → causal recurrent state
+
+across factual, psychological and social spaces, while preserving article boundaries, missing-data semantics, parameter ownership and traceability.
+
+The pilot demonstrates that this architecture can be constructed, trained within a tightly controlled parameter scope, persisted, restored and evaluated deterministically.
+
+The next scientific question is no longer whether the architecture can execute as intended. It is whether the architecture provides reproducible out-of-sample explanatory and predictive value when evaluated on a substantially larger and independently partitioned corpus.
